@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script type="text/javascript" src="{{ url_for('static', filename='bower_components/requirejs/require.js') }}"></script>
+</head>
+<body>
+    <div id="root">
+    </div>
+    <script type="text/javascript">
+        var BASE = 'static/app';
+        var JSX = './jsx';
+        require.config({
+            paths: {
+                'react': 'static/bower_components/react/react',
+                'react-dom': 'static/bower_components/react/react-dom',
+            }
+        });
+        require([JSX+'/index.js'])
+    </script>
+</body>
+</html>

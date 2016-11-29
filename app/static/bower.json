@@ -1,0 +1,17 @@
+{
+  "name": "react-exmple",
+  "authors": [
+    "Horácio Dias <horacio.baptista@supportweb.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
