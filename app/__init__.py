@@ -14,7 +14,7 @@ def index():
 def jsx(jsx):
     jsx += 'x'
     complete_path = os.path.join(static_folder_root, 'app', jsx)
-    print(complete_path)
+    #print(complete_path)
     with open(complete_path) as file:
         from react import jsx
         transformer = jsx.JSXTransformer()

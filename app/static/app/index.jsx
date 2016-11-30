@@ -3,9 +3,8 @@ define(function(require, exports, module){
     var ReactDOM = require('react-dom')
     var Teste = require('./teste');
 
-
     ReactDOM.render(
-      <h1>Hello, world!<Teste/></h1>,
+      <h1>Hello, world!<Teste nome="LOL" mensagem="Seje menos nervosa"/></h1>,
       document.getElementById('root')
     );
 });

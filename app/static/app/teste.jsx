@@ -4,8 +4,13 @@ define(function(require, exports, module){
 
     var Teste = React.createClass({
         render() {
+            var nome = this.props.mensagem;
+            var mensagem = this.props.mensagem;
             return (
-                <div>Olá Djow</div>
+                <div>
+                    <span>Olá {nome}</span>
+                    <h2>{mensagem}</h2>
+                </div>
             );
         }
     });
