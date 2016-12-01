@@ -21,7 +21,7 @@ define(function(require, exports, module){
             this.bind('change', callback);
         },
         removeChangeListener: function(callback) {
-            this.removeListener('change', callback);
+            this.unbind('change', callback);
         },
         emitChange: function(page) {
             this.trigger('change', page);
@@ -39,15 +39,17 @@ define(function(require, exports, module){
     });
 
     var Index = React.createClass({
-        goTeste:function(){
+        goTeste:function(evt){
+            var page = evt.target.getAttribute('data-page');
             AppDispatcher.dispatch({
               type: 'page',
-              page: 'teste'
+              page: page
             });
         },
         render:function(){
             return (<div>
-                        <span onClick={this.goTeste}>Que zica</span>
+                        <span data-page="teste" onClick={this.goTeste}>Eita Giovana</span>
+                        <span data-page="vish" onClick={this.goTeste}>Teste 404</span>
                     </div>)
         }
     });
