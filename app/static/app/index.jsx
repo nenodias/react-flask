@@ -39,7 +39,7 @@ define(function(require, exports, module){
     });
 
     var Index = React.createClass({
-        goTeste:function(evt){
+        goTo:function(evt){
             var page = evt.target.getAttribute('data-page');
             AppDispatcher.dispatch({
               type: 'page',
@@ -48,8 +48,8 @@ define(function(require, exports, module){
         },
         render:function(){
             return (<div>
-                        <span data-page="teste" onClick={this.goTeste}>Eita Giovana</span>
-                        <span data-page="vish" onClick={this.goTeste}>Teste 404</span>
+                        <span data-page="teste" onClick={this.goTo}>Eita Giovana</span>
+                        <span data-page="vish" onClick={this.goTo}>Teste 404</span>
                     </div>)
         }
     });
