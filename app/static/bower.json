@@ -16,6 +16,8 @@
   ],
   "dependencies": {
     "react": "^15.4.1",
-    "requirejs": "^2.3.2"
+    "requirejs": "^2.3.2",
+    "react-bootstrap": "^0.30.7",
+    "bootstrap": "^3.3.7"
   }
 }

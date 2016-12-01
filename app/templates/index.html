@@ -1,8 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Document</title>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>React Flask</title>
+    
+    <script rel="stylesheet" type="text/javascript" src="{{url_for('static', filename='bower_components/jquery/dist/jquery.min.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='bower_components/bootstrap/dist/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='bower_components/bootstrap/dist/css/bootstrap-theme.min.css') }}">
+    <script type="text/javascript" src="{{ url_for('static', filename='bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='bower_components/requirejs/require.js') }}"></script>
 </head>
 <body>
@@ -15,6 +23,11 @@
             paths: {
                 'react': 'static/bower_components/react/react',
                 'react-dom': 'static/bower_components/react/react-dom',
+                'flux':'static/bower_components/flux/dist/Flux.min',
+                'flux-utils':'static/bower_components/flux/dist/FluxUtils.min',
+                'object-assign':'static/bower_components/object-assign/index',
+                'microevent':'static/bower_components/microevent/microevent',
+                'react-bootstrap':'static/bower_components/react-bootstrap/react-bootstrap.min'
             }
         });
         require([JSX+'/index.js'])
