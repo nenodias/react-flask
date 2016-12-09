@@ -16,6 +16,7 @@ define(function(require, exports, module){
 
     var MicroEvent = require('microevent');
 
+
     var RouterStore = Object.assign(MicroEvent.prototype, {
         addChangeListener: function(callback) {
             this.bind('change', callback);
@@ -29,21 +30,22 @@ define(function(require, exports, module){
         dispatcherIndex: AppDispatcher.register(function(payload) {
             switch(payload.type) {
                 case 'page':
-                    RouterStore.emitChange(payload.page);
+                    RouterStore.emitChange(payload);
                     break;
                 case 'delete-item':
                     //lógica para deletar
                     break;
             }
         })
-    });
+    });    
 
     var Index = React.createClass({
         goTo:function(evt){
             var page = evt.target.getAttribute('data-page');
             AppDispatcher.dispatch({
               type: 'page',
-              page: page
+              page: page,
+              params:{}
             });
         },
         render:function(){
@@ -54,30 +56,11 @@ define(function(require, exports, module){
         }
     });
 
-    var MenuApp = React.createClass({
-        getInitialState:function(){
-            return {'page':'index'}
-        },
-        componentDidMount: function() {
-            RouterStore.addChangeListener(this.dispatchPage);
-        },
-        dispatchPage: function(page) {
-            this.setState({'page':page});
-        },
-        render:function(){
-            switch(this.state.page){
-                case 'index':
-                    return <App><Index /></App>
-                case 'teste':
-                    return <App><Teste /></App>
-                default:
-                    return <App><NoMatch /></App>
-            }
-        }
-    });
 
     var App = React.createClass({
-
+        handleClick:function(e){
+            location.href = e.target.getAttribute('href');
+        },
         render:function(){
             return (<div>
                         <Navbar inverse collapseOnSelect>
@@ -89,8 +72,8 @@ define(function(require, exports, module){
                             </Navbar.Header>
                             <Navbar.Collapse>
                               <Nav>
-                                <NavItem eventKey={1} href="teste">Teste</NavItem>
-                                <NavItem eventKey={2} href="#">Link</NavItem>
+                                <NavItem eventKey={1} onClick={this.handleClick} href="#/teste">Teste</NavItem>
+                                <NavItem eventKey={2} href="#/">Link</NavItem>
                                 <NavDropdown eventKey={3} title="Dropdown" id="basic-nav-dropdown">
                                   <MenuItem eventKey={3.1}>Action</MenuItem>
                                   <MenuItem eventKey={3.2}>Another action</MenuItem>
@@ -115,6 +98,75 @@ define(function(require, exports, module){
     var NoMatch = React.createClass({
         render:function(){
             return <h1>Not Found</h1>;
+        }
+    });
+
+    var routes = {
+        '/':{
+            component:Index
+        },
+        '/teste':{
+            component:Teste
+        }
+    }
+
+    var router = function() {
+        // Current route url (getting rid of '#' in hash as well):
+        var url = location.hash.slice(1) || '/';
+        // Get route by url:
+        var chaves_url = Object.keys(routes);
+        var data = {};
+        var route = undefined;
+        for (var i = 0; i < chaves_url.length; i++) {
+            var pattern = new RegExp(chaves_url[i]);
+            var result = url.match(pattern);
+            if (result != null) {
+                route = routes[chaves_url[i]];
+                var parts = url.split('?');
+                if(parts.length > 1){
+                    var params = parts[1].split('&');
+                    var val = "";
+                    for ( var i = 0; i < params.length; i++) {
+                        var paramNameVal = params[i].split('=');
+                        val = paramNameVal[1];
+                        data[ paramNameVal[0] ] = val;
+                    }
+                    data = val;
+                }
+            }
+        }
+        if(route !== undefined){
+            AppDispatcher.dispatch({
+              type: 'page',
+              component: route.component,
+              params:data
+            });
+        }else{
+            AppDispatcher.dispatch({
+              type: 'page',
+              component: NoMatch,
+              params:data
+            });
+        }
+    };
+
+    window.addEventListener('hashchange', router);
+    window.addEventListener('load', router);
+
+    var MenuApp = React.createClass({
+        getInitialState:function(){
+            return {'root': routes['/']}
+        },
+        componentDidMount: function() {
+            RouterStore.addChangeListener(this.dispatchPage);
+        },
+        dispatchPage: function(signal) {
+            this.setState({'root':signal});
+        },
+        render:function(){
+            var Component = this.state.root.component;
+            var params = this.state.root.params;
+            return <App><Component params={params} /></App>;
         }
     });
 
