@@ -40,27 +40,38 @@ define(function(require, exports, module){
     });    
 
     var Index = React.createClass({
-        goTo:function(evt){
-            var page = evt.target.getAttribute('data-page');
-            AppDispatcher.dispatch({
-              type: 'page',
-              page: page,
-              params:{}
-            });
-        },
         render:function(){
             return (<div>
-                        <span data-page="teste" onClick={this.goTo}>Eita Giovana</span>
-                        <span data-page="vish" onClick={this.goTo}>Teste 404</span>
+                        <span data-page="teste">Eita Giovana</span>
+                        <span data-page="vish">Teste 404</span>
                     </div>)
+        }
+    });
+
+    var HrefClickMixin = {
+        onClick:function(e){
+            var url = e.target.getAttribute('href');
+            if(history.pushState) {
+                history.pushState(null, null, url);
+                var evento = new Event('hashchange');
+                window.dispatchEvent(evento);
+            }else {
+                location.href = url;
+            }
+        }
+    };
+
+    var CustomNavItem = React.createClass({
+        mixins: [HrefClickMixin],
+        render:function(){
+            this.props.eventKey;
+            return <NavItem eventKey={this.props.eventKey} onClick={this.onClick} href={this.props.href}>{this.props.children}</NavItem>
         }
     });
 
 
     var App = React.createClass({
-        handleClick:function(e){
-            location.href = e.target.getAttribute('href');
-        },
+        
         render:function(){
             return (<div>
                         <Navbar inverse collapseOnSelect>
@@ -72,8 +83,8 @@ define(function(require, exports, module){
                             </Navbar.Header>
                             <Navbar.Collapse>
                               <Nav>
-                                <NavItem eventKey={1} onClick={this.handleClick} href="#/teste">Teste</NavItem>
-                                <NavItem eventKey={2} href="#/">Link</NavItem>
+                                <CustomNavItem eventKey={1} href="#/teste">Teste</CustomNavItem>
+                                <CustomNavItem eventKey={2} href="#/">Link</CustomNavItem>
                                 <NavDropdown eventKey={3} title="Dropdown" id="basic-nav-dropdown">
                                   <MenuItem eventKey={3.1}>Action</MenuItem>
                                   <MenuItem eventKey={3.2}>Another action</MenuItem>
@@ -110,7 +121,7 @@ define(function(require, exports, module){
         }
     }
 
-    var router = function() {
+    var router = function(e) {
         // Current route url (getting rid of '#' in hash as well):
         var url = location.hash.slice(1) || '/';
         // Get route by url:
@@ -152,6 +163,7 @@ define(function(require, exports, module){
 
     window.addEventListener('hashchange', router);
     window.addEventListener('load', router);
+    //window.addEventListener('popstate', router);
 
     var MenuApp = React.createClass({
         getInitialState:function(){
