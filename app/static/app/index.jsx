@@ -2,6 +2,10 @@ define(function(require, exports, module){
     var React = require('react');
     var ReactDOM = require('react-dom')
     var Teste = require('./teste');
+
+    var Router = require('react-router').Router;
+    var Route = require('react-router').Route;
+    var Link = require('react-router').Link;
     
     var Dispatcher = require('flux').Dispatcher;
     var AppDispatcher = new Dispatcher();
@@ -14,18 +18,18 @@ define(function(require, exports, module){
     var NavDropdown = require('react-bootstrap').NavDropdown;
     var MenuItem = require('react-bootstrap').MenuItem;
 
-    var MicroEvent = require('microevent');
+    var EventEmitter = require('events').EventEmitter
 
 
-    var RouterStore = Object.assign(MicroEvent.prototype, {
+    var RouterStore = Object.assign(EventEmitter.prototype, {
         addChangeListener: function(callback) {
-            this.bind('change', callback);
+            this.addListener('change', callback);
         },
         removeChangeListener: function(callback) {
-            this.unbind('change', callback);
+            this.removeListener('change', callback);
         },
         emitChange: function(page) {
-            this.trigger('change', page);
+            this.emit('change', page);
         },
         dispatcherIndex: AppDispatcher.register(function(payload) {
             switch(payload.type) {

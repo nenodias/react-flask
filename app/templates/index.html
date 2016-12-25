@@ -7,11 +7,11 @@
     
     <title>React Flask</title>
     
-    <script rel="stylesheet" type="text/javascript" src="{{url_for('static', filename='bower_components/jquery/dist/jquery.min.js') }}"></script>
-    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='bower_components/bootstrap/dist/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='bower_components/bootstrap/dist/css/bootstrap-theme.min.css') }}">
-    <script type="text/javascript" src="{{ url_for('static', filename='bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='bower_components/requirejs/require.js') }}"></script>
+    <script rel="stylesheet" type="text/javascript" src="{{url_for('static', filename='node_modules/jquery/dist/jquery.min.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='node_modules/bootstrap/dist/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='node_modules/bootstrap/dist/css/bootstrap-theme.min.css') }}">
+    <script type="text/javascript" src="{{ url_for('static', filename='node_modules/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='node_modules/requirejs/require.js') }}"></script>
 </head>
 <body>
     <div id="root">
@@ -21,14 +21,15 @@
         var JSX = './jsx';
         require.config({
             paths: {
-                'react': 'static/bower_components/react/react',
-                'react-dom': 'static/bower_components/react/react-dom',
-                'flux':'static/bower_components/flux/dist/Flux.min',
-                'flux-utils':'static/bower_components/flux/dist/FluxUtils.min',
-                'object-assign':'static/bower_components/object-assign/index',
-                'microevent':'static/bower_components/microevent/microevent',
-                'react-bootstrap':'static/bower_components/react-bootstrap/react-bootstrap.min'
-            }
+                'react': 'static/node_modules/react/dist/react',
+                'react-dom': 'static/node_modules/react-dom/dist/react-dom',
+                'react-router': 'static/node_modules/react-router/umd/ReactRouter',
+                'flux':'static/node_modules/flux/dist/Flux.min',
+                'flux-utils':'static/node_modules/flux/dist/FluxUtils.min',
+                'object-assign':'static/node_modules/object-assign/index',
+                'events':'static/node_modules/events/events',
+                'react-bootstrap':'static/node_modules/react-bootstrap/dist/react-bootstrap.min'
+            },
         });
         require([JSX+'/index.js'])
     </script>
