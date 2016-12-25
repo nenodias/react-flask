@@ -4,8 +4,11 @@ define(function(require, exports, module){
     var Teste = require('./teste');
 
     var Router = require('react-router').Router;
+    var Redirect = require('react-router').Redirect;
     var Route = require('react-router').Route;
     var Link = require('react-router').Link;
+    var browserHistory = require('react-router').browserHistory;
+
     
     var Dispatcher = require('flux').Dispatcher;
     var AppDispatcher = new Dispatcher();
@@ -19,7 +22,6 @@ define(function(require, exports, module){
     var MenuItem = require('react-bootstrap').MenuItem;
 
     var EventEmitter = require('events').EventEmitter
-
 
     var RouterStore = Object.assign(EventEmitter.prototype, {
         addChangeListener: function(callback) {
@@ -55,13 +57,7 @@ define(function(require, exports, module){
     var HrefClickMixin = {
         onClick:function(e){
             var url = e.target.getAttribute('href');
-            if(history.pushState) {
-                history.pushState(null, null, url);
-                var evento = new Event('hashchange');
-                window.dispatchEvent(evento);
-            }else {
-                location.href = url;
-            }
+            routes.transitionTo(url);
         }
     };
 
@@ -87,8 +83,9 @@ define(function(require, exports, module){
                             </Navbar.Header>
                             <Navbar.Collapse>
                               <Nav>
-                                <CustomNavItem eventKey={1} href="#/teste">Teste</CustomNavItem>
-                                <CustomNavItem eventKey={2} href="#/">Link</CustomNavItem>
+
+                                <CustomNavItem eventKey={1} href="teste">Teste</CustomNavItem>
+                                <CustomNavItem eventKey={2} href="home">Link</CustomNavItem>
                                 <NavDropdown eventKey={3} title="Dropdown" id="basic-nav-dropdown">
                                   <MenuItem eventKey={3.1}>Action</MenuItem>
                                   <MenuItem eventKey={3.2}>Another action</MenuItem>
@@ -115,79 +112,19 @@ define(function(require, exports, module){
             return <h1>Not Found</h1>;
         }
     });
-
-    var routes = {
-        '/':{
-            component:Index
-        },
-        '/teste':{
-            component:Teste
-        }
-    }
-
-    var router = function(e) {
-        // Current route url (getting rid of '#' in hash as well):
-        var url = location.hash.slice(1) || '/';
-        // Get route by url:
-        var chaves_url = Object.keys(routes);
-        var data = {};
-        var route = undefined;
-        for (var i = 0; i < chaves_url.length; i++) {
-            var pattern = new RegExp(chaves_url[i]);
-            var result = url.match(pattern);
-            if (result != null) {
-                route = routes[chaves_url[i]];
-                var parts = url.split('?');
-                if(parts.length > 1){
-                    var params = parts[1].split('&');
-                    var val = "";
-                    for ( var i = 0; i < params.length; i++) {
-                        var paramNameVal = params[i].split('=');
-                        val = paramNameVal[1];
-                        data[ paramNameVal[0] ] = val;
-                    }
-                    data = val;
-                }
-            }
-        }
-        if(route !== undefined){
-            AppDispatcher.dispatch({
-              type: 'page',
-              component: route.component,
-              params:data
-            });
-        }else{
-            AppDispatcher.dispatch({
-              type: 'page',
-              component: NoMatch,
-              params:data
-            });
-        }
-    };
-
-    window.addEventListener('hashchange', router);
-    window.addEventListener('load', router);
-    //window.addEventListener('popstate', router);
-
-    var MenuApp = React.createClass({
-        getInitialState:function(){
-            return {'root': routes['/']}
-        },
-        componentDidMount: function() {
-            RouterStore.addChangeListener(this.dispatchPage);
-        },
-        dispatchPage: function(signal) {
-            this.setState({'root':signal});
-        },
-        render:function(){
-            var Component = this.state.root.component;
-            var params = this.state.root.params;
-            return <App><Component params={params} /></App>;
-        }
-    });
+    var routes = (
+        <Router history={browserHistory}>
+            <Redirect from="/" to="home" />
+            <Route path="/" component={App}>
+                <Route path="home" component={Index}/>
+                <Route path="teste" component={Teste}>
+            </Route>
+            <Route path="*" component={NoMatch}/>
+            </Route>
+        </Router>);
 
     ReactDOM.render(
-        <MenuApp />,
+        routes,
         document.getElementById('root')
     );
 

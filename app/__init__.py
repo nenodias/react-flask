@@ -6,8 +6,9 @@ app = Flask(__name__)
 
 static_folder_root = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
 
-@app.route('/')
-def index():
+@app.route('/', defaults={'value':None})
+@app.route('/<path:value>')
+def index(value):
     return render_template('index.html')
 
 @app.route('/jsx/<path:jsx>')
