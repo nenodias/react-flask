@@ -10,8 +10,12 @@ Para rodar é necessário o NodeJs instalado (o PyReact compila os JSX usando o 
 Além disso é preciso do bower para instalar as dependências da pasta static.
 
 ```
+
 cd app/static
-bower install
+npm install
+npm install -g requirejs (talvez com sudo)
+r.js -convert node_modules/events node_modules/events (para converter a biblioteca events para o formato do requirejs)
+
 ```
 
 ```
