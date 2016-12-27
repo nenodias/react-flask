@@ -8,6 +8,7 @@ define(function(require, exports, module){
     var Route = require('react-router').Route;
     var Link = require('react-router').Link;
     var browserHistory = require('react-router').browserHistory;
+    var hashHistory = require('react-router').hashHistory;
 
     
     var Dispatcher = require('flux').Dispatcher;
@@ -48,6 +49,7 @@ define(function(require, exports, module){
     var Index = React.createClass({
         render:function(){
             return (<div>
+                        <h1>Index</h1>
                         <span data-page="teste">Eita Giovana</span>
                         <span data-page="vish">Teste 404</span>
                     </div>)
@@ -84,8 +86,8 @@ define(function(require, exports, module){
                             <Navbar.Collapse>
                               <Nav>
 
-                                <CustomNavItem eventKey={1} href="teste">Teste</CustomNavItem>
-                                <CustomNavItem eventKey={2} href="home">Link</CustomNavItem>
+                                <CustomNavItem eventKey={1} href="#/teste">Teste</CustomNavItem>
+                                <CustomNavItem eventKey={2} href="#/home">Link</CustomNavItem>
                                 <NavDropdown eventKey={3} title="Dropdown" id="basic-nav-dropdown">
                                   <MenuItem eventKey={3.1}>Action</MenuItem>
                                   <MenuItem eventKey={3.2}>Another action</MenuItem>
@@ -113,13 +115,12 @@ define(function(require, exports, module){
         }
     });
     var routes = (
-        <Router history={browserHistory}>
+        <Router history={hashHistory}>
             <Redirect from="/" to="home" />
             <Route path="/" component={App}>
-                <Route path="home" component={Index}/>
-                <Route path="teste" component={Teste}>
-            </Route>
-            <Route path="*" component={NoMatch}/>
+                <Route path="home" component={Index} />
+                <Route path="teste" component={Teste} />
+                <Route path="*" component={NoMatch} />
             </Route>
         </Router>);
 
