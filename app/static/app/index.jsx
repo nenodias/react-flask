@@ -59,7 +59,11 @@ define(function(require, exports, module){
     var HrefClickMixin = {
         onClick:function(e){
             var url = e.target.getAttribute('href');
-            routes.transitionTo(url);
+            if(routes.transitionTo){
+                routes.transitionTo(url);
+            }else{
+                routes.props.history.transitionTo(url);
+            }
         }
     };
 
